@@ -154,4 +154,4 @@ function init(){
   title.addEventListener("click", handleClick2);
 }
 
-init();
+init(); 

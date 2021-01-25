@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Cinque Terre</title>
+
+    <style>
+     * {
+        box-sizing: border-box;
+    }
+    .menu {
+      float:left;
+      width:20%;
+    }
+    .menuItem{
+      padding:8px;
+      margin-top:7px;
+      border-bottom:1px solid;
+    }
+    .main{
+      float: left;
+      width: 60%;
+      padding:20px;
+      overflow:auto;
+    }
+    .right{
+      float:left;
+      background-color:lightblue;
+      width:20%;
+      padding:15px
+    }
+    .bottom{
+      background-color:#E6E6E6;
+      text-align:center;
+      padding:10px;
+      margin-top:10px;
+      font-size:12px;
+    }
+    @media only screen and (max-width: 500px){
+      .menu, .main, .right{
+        width: 100%;
+      }
+    }
+
+    @media only screen and (max-width: 800px){
+      .main{
+        width:80%;
+        padding: 0;
+      }
+      .right{
+        width: 100%;
+      }
+    }
+    </style>
+  </head>
+  <body>
+  <div style="background-color:#E6E6E6">
+    <h1>Cinque Terre</h1>
+    <h3>Resize the browser window</h3>
+  </div>
+
+  <div style="overflow:auto">
+    <div class="menu">
+      <div class="menuItem">The Wark</div>
+      <div class="menuItem">Transport</div>
+      <div class="menuItem">History</div>
+      <div class="menuItem">Gallery</div>
+    </div>
+    <div class="main">
+      <h2>The Walk</h2>
+      <p>The walk from Monterosso to Riomaggiore will take you approximately two hours, give or take an hour depending on the weather conditions and your physical shape.</p>
+      <img src="img/img_5terre.jpg" alt="the walk" style="width:100%">
+    </div>
+    <div class="right">
+      <h2>What?</h2>
+      <p>Cinque Terre comprises five villages: Monterosso, Vernazza, corniglia, Manarola, and Riomaggiore.</p>
+      <h2>Where?</h2>
+      <p>On the northwest cost of the Italian Riviera,  north of the city La Spezia.</p>
+      <h2>Price?</h2>
+      <p>The Walk is free!</p>
+    </div>
+  </div>
+
+  <div class="bottom">
+    This web page is a part of a demonstration of fluid web design made by w3schools.com. Resize the browser window to see the content respond to the resizing.
+  </div>
+ </body>
+</html>

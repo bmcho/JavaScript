@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>  
+    <head>  
+
+    </head>
+    <body>
+        <script>
+          let a = 50;
+          let b = a; // <-- Whats on a? : 50
+          a = 10;
+          console.log(b); // 50
+          //a의 value를 b로 카피
+
+          //reference
+          const food = ["kimchi", "potato"];
+          const foodcopy = food;
+          console.log(foodcopy); // "kimchi", "potato"
+          food.push("tomato");
+          console.log(foodcopy); // "kimchi", "potato", "tomato"
+          foodcopy.push("bulgogi");
+          console.log(food);
+          //foodcopy는 food의 value를 copy를 한것이 아니라
+          //해당 배열을 reference하고 있음 -- 메모리를 가르키고있음
+        </script>
+    </body>
+</html>

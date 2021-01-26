@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>  
+    <head>  
+
+    </head>
+    <body>
+        <script>
+            function three(){
+                console.log("i love js");
+            }
+            function two(){
+                three();
+            }
+            function one(){
+                two();
+            }
+            function zero(){
+                one();         
+                throw Error("omg im am an error");       
+            }
+
+            zero();
+
+            //실행 순서 
+            // zero -> one -> two -> three -> console.log -> throw Error
+        </script>
+    </body>
+</html>

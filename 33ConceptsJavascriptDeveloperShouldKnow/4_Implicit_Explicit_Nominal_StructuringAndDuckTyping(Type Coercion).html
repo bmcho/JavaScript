@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>  
+    <head></head>
+    <body>
+        <script>
+            //자동으로 conversion을 해준다.
+
+            // 숫자일 경우
+            // true == 1
+            // fasle == 0
+            console.log(66 + true); //67
+            console.log(66 + 1); // 67 
+            console.log(66 * false); //0
+            
+            //string
+            // Only + 일때만 가능
+            // + -> loaded operator
+            console.log(66 + "false"); // 66false
+            console.log(66 + "1");  // 661
+            // if - 라면
+            console.log(66 - "1");  // 65
+            console.log(66 - "aa"); // NaN
+
+            /* 
+                if 66 + 77 + "false" 경우
+                연산의 순서의 따라 number인 6+7이 계산이되어 13이되고
+                13과 string인 "false"를 만나 '13false'가 괸다
+            */ 
+            console.log(6 + 7 +"false");
+
+            /*
+                TypeCoercion이 동작하지 않기를 바란다면
+                비교 연산자 '=='를 '==='로 바꾸면 된다
+                이거 좀 쩐다
+            */
+            console.log("" == true); // false
+            console.log("" === true); // false
+            console.log("" == false); // true
+            console.log("" === false); // false
+            console.log("1" === true); //false
+            console.log("1" == true); //true
+            console.log(1 == "1"); //true
+            console.log(1 === "1"); //false
+
+        </script>
+    </body>
+</html>

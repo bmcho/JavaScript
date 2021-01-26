@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>  
+    <head>  
+
+    </head>
+    <body>
+        <script>
+            function hello(){
+                bye();
+            }
+            function bye(){
+                hello();
+            }
+            //위 함수를 실행 시킬시 Maximum CallStack size exceeded Error 발생
+            
+            //primitive -> 원시적인, 기초적인
+            //기초적인 Type들을 뜻함 string, numbers ... 등등
+
+            /*
+            그 중 null, undefined, NaN 3개의 차이점을 알아보자
+            null - 존재하지 않음
+            undefined - 정의가 되지 않음
+            NaN - Not A Number
+            */
+            let hello;
+            
+            consoel.log(hello === undefined); //true
+            consoel.log(hello === null); // false
+            
+            hello = null;
+            consoel.log(hello === null); // true
+
+            /*
+            즉 undefined는 변수의 Value를 정의하지 않은 것을 뜻하며
+            null은 존재하지않는다는 Value를 뜻한다
+            */
+
+            let num = Math.pow(5, "hello");
+            console.log(num); // NaN
+            //즉 value의 값이 number가 나와야하지만 number이 아니라는 뜻
+            
+        </script>
+    </body>
+</html>

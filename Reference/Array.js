@@ -1,6 +1,7 @@
+//Array Properties
+
 //constructor
 //Array 객체의 프로토 타입을 만든 함수를 반환합니다.
-
 const btnConstructor = document.querySelector(".btn-Constructor");
 const btnLength = document.querySelector(".btn-Length");
 const btnPrototype = document.querySelector(".btn-Prototype");
@@ -45,10 +46,29 @@ function handleBtnProtoTypeClick(event){
 }
 
 
+//Array Methods
+const btnConcat = document.querySelector(".btn-Concat");
+
+let hege = ["Cecilie", "Lone"];
+let stale = ["Emil", "Tobias", "Linus"];
+
+//concat()
+//The concat() method is used to join two or more arrays.
+function handleBtnConcatClick(event){
+    const div = document.querySelector(".concat");
+    if(div.querySelector("span") === null){
+        const span = document.createElement("span");
+        span.innerHTML = hege.concat(stale);
+        div.appendChild(span);
+    }
+}
+
 function init(){
     btnConstructor.addEventListener("click", handleBtnConstructorClick);
     btnLength.addEventListener("click", handleBtnLengthClick);
     btnPrototype.addEventListener("click", handleBtnProtoTypeClick);
+
+    btnConcat.addEventListener("click", handleBtnConcatClick)
 }
 
 init();

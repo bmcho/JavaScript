@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>  
+    <head></head>
+    <body>
+        <script>
+            //Scope을 해석하자면 범위라는 뜻 
+            //c#, Jave등의 언어의 전역변수 지역변수 정도
+
+            //hello는 {} 안에서만 존재
+            if(true){
+                const hello = "hi!";
+                var hi = "hello";
+                console.log(hello);
+            }
+            // console.log(hello); // hello is not defined
+            
+            const hello = "hi!";
+            function a(){
+                console.log(hello); //"hi!";
+            }
+            a();
+
+            //var를 사용하면 안되는 이유
+            console.log(hi);
+            /*
+                위의 내용대로라면 결과 : hi is not defined가 정상
+                하지만 var는 ScopeChain 일어나 해당 변수를 찾기위하여
+                최선을 다함
+                const or let을 사용하자
+            */
+            
+            function a() {
+                let aa = "a";
+                function b() {
+                    let bb = "b";
+                    function c(){
+                        let cc = "c";
+                    }
+                }
+            }
+            /*
+                function c에서는 function b,a의 변수 aa,bb에 대하여 접근이 가능
+                b는 aa는 접근이 가능하다 cc는 접근이 불가능
+                a는 둘다 불가능
+                bubbling !!!!!!!!!!!
+            */
+
+        </script>
+    </body>
+</html>

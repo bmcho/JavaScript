@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>  
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <script>    
+        /*
+            IIFE(Immediately-Invoked-function Expressions)
+            정의와 동시에 즉시 실행되는 함수를 의미
+        */
+        
+        /*
+            일반적인 함수 정의 - 함수 리터럴
+            1.예약어 fucnstion(필수)
+            2.함수이름(선택)
+            3.매개변수 집합(필수)
+            4.함수 본문(필수)
+        */
+        function add(a, b){
+            return a + b;
+        }
+        //function (a, b) {return a + b} //Uncaught SyntaxError: Unexpected token 
+        /*
+            함수이름은 선택이지만 특정 조건이 충족되어야함\
+            1.이 함수를 할당 받을 변수를 지정
+            2.이 함수를 즉시 호출
+        */
+        
+        // IIFE 표현식
+        (function(a, b) { return a + b; })(4, 5); // 9
+        ((a,b) => {return a + b;})(1,2); // 3
+
+
+        /*
+            Modules
+            타입을 module 함으로서 브라우저는 해당 script를 모듈로 인식
+
+            ✨ <script type=module>의 특성
+                먼저 MDN의 javascript modules에 관한 설명에 따르면 문제가 된 부분같이 type을 module로 설정한<script> 태그가 포함된 
+                HTML 파일을 로컬에서 로드할 경우 자바스크립트 모듈 보안 요구사항으로 인해 CORS 오류가 발생한다고 합니다. 
+                그 때문에 ajax로 요청한 것임 아님에도 불구하고 CORS 오류가 발생했던 것이죠.
+            🍜 로컬의 리소스를 요청할 때의 origin(출처)은 null이다
+                두번째 질문에 대한 답은, 알고 보니 발생하는 에러 문구에 힌트가 있었습니다.
+            그러므로 밑의 코딩은 Error가 난다
+        */
+        </script>
+        <script type="module" src="app1.js"></script>
+        <script type="module" src="app2.js"></script>
+    </body>
+</html>

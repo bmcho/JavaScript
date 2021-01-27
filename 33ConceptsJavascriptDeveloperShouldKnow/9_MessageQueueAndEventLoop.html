@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>  
+    <head></head>
+    <body>
+        
+        <script>
+            /*
+                blocking과 non blocking의 이해가 필요
+                JavaScrit는 non blocking 언어
+
+                참고 URL : https://grip.news/archives/1304
+                
+                즉 blocking은 작업이 실행되면 시스템 호출 응답대기 상태가 되며
+                먼저 실행된 작업이 돌아올때까지 다른 작업을 처리를 할 수 없다.
+                non blocking은 작업을 실행 즉시 제어가 돌아와 호출을 기다리지 않고 다른 작업이 가능
+
+                JavaScript는 기본적은로 non blocking언어 이나
+                alert 함수가 실행 될시 다른작업을 할 수없다. 즉 alert은 blocking이다. 
+            */
+            
+            /*
+                MessageQueue 
+
+                밑의 결과가 나오는 이유는 Call의 규칙 때문이다
+                기본적으로 javascript는 실행순서를 Stack에 쌓아놓고 하나씩 Call을 하는 방식이다.
+                여기서 setTimeout() 함수의 경우 JavaScript의 영역이 아닌 브라우저의 영역으로 들어간다.
+                그 말은 Stack에 쌓이지 않고 WebAPI를 거쳐 MessageQueue에 쌓이게 된다.
+                MessageQueue의 우선순위는 Stack보다 낮다. Satack의 Call이 모두 이루어 저야 MessageQueue Call이
+                이루어 진다는 뜻이다.
+
+                우선순위
+                Stack > MessageQueue
+
+                밑의 예시에서 
+                console.log("bye"); 를 몇번을 작성을 하더라도
+                setTimeout(() => console.log("hi"), 0);의 hi가 맨 마지막에 나오게 된다.        
+
+                위의 규칙때문에 JavaScript는 Callback, Event 함수를 사용한다.
+                만약 위의 규칙대로 프로그램이 구동 된다고 가정하여 fetch 등 WebAPI를 사용한다면
+                Stack과 MessagQueue의 우선순위 때문에 Request에 대한 Respone는 이미 MessageQueue에 있지만
+                Call을 할 수 없을 수도 있다. 이러한 동작은 javaScript가 non blocking 언어이기 때문에 가능한 것이며
+                그렇기 때문에 CallBack과 Event를 통하여 위의 문제점을 해결하는 것이다.
+                
+            */
+            setTimeout(() => console.log("hi"), 0);
+            console.log("bye");
+            // 실행 결과 : bye , hi
+        </script>
+    </body>
+</html>

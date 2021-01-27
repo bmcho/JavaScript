@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>  
+    <head></head>
+    <body>
+        <script>
+            //setTimeout, setInerval은 JavaScript의 개념이 아님
+            //브라우저, Node.js의 개념
+            /*
+                setTimeout - 일정 시간이 지난 후 함수를 실행
+                setTimeout(func||code, delay, param1, parma2...)
+                func의 전달되는 매개변수
+            */
+           
+            /*
+                setInterval - 일정 시간마다 함수를 실행
+                setInterval(func||code, delay, param1, parma2...)
+                func의 전달되는 매개변수
+            */
+
+            /*
+                setTimeout 과 setInterval은 같은ID 공간을 공유
+                clearTimeout(), clearInterval() 둘 중 어느것을 사용해도 기술적으로 동일하게 동작
+
+                정기적으로 함수를 실행 시키는 방법은 두 가지 방법이있다.
+
+                한가지는 setInterval이며 또 한가지는 재귀적인 setTimeout이다
+
+                밑의 예시는 살펴보자
+                
+                setTimeout으로 인하여 2초뒤 tick이 실행 되었다.
+                alert 시킨 이후 다시 setTimeout을 사용하여 2초뒤 또다른 alert을 실행시켰다.
+                이러한 방식으로 재귀적인 접근이 가능하다.
+
+                setTimeout은 setInterval보다 유연하다
+                setInterval은 정해진 시간 안에서 정기적으로 실행을 하지만
+                setTimeout은 상황에 따라 delay의 조절이 가능하다
+
+                자세한 참고자료 URL : https://velog.io/@jakeseo_me/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EA%B0%9C%EB%B0%9C%EC%9E%90%EB%9D%BC%EB%A9%B4-%EC%95%8C%EC%95%84%EC%95%BC-%ED%95%A0-33%EA%B0%80%EC%A7%80-%EA%B0%9C%EB%85%90-10-%EC%8A%A4%EC%BC%80%EC%A5%B4%EB%A7%81-setTimeout-%EA%B3%BC-setInterval-y6juukjsey
+            */
+
+            let timerId = setTimeout(function tick() {
+                alert('tick');
+                timerId = setTimeout(tick, 2000); // (*)
+            }, 2000);
+            
+
+
+            function say() {
+                console.log("Hi");
+                requestAnimationFrame(say);
+            }
+
+            
+
+        </script>
+    </body>
+</html>

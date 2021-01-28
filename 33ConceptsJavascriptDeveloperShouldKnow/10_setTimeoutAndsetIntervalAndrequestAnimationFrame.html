@@ -2,6 +2,8 @@
 <html>  
     <head></head>
     <body>
+
+        <div id="SomeElementYouWantToAnimate" style="color:blue">Test</div>
         <script>
             //setTimeout, setInerval은 JavaScript의 개념이 아님
             //브라우저, Node.js의 개념
@@ -35,23 +37,47 @@
                 setInterval은 정해진 시간 안에서 정기적으로 실행을 하지만
                 setTimeout은 상황에 따라 delay의 조절이 가능하다
 
+                setInterval의 interval을 사용자가 0.5초로 지정하였다고해도
+                Javascript에서 1초로 바꾸어 버린다.(minimum 1초)
+
                 자세한 참고자료 URL : https://velog.io/@jakeseo_me/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EA%B0%9C%EB%B0%9C%EC%9E%90%EB%9D%BC%EB%A9%B4-%EC%95%8C%EC%95%84%EC%95%BC-%ED%95%A0-33%EA%B0%80%EC%A7%80-%EA%B0%9C%EB%85%90-10-%EC%8A%A4%EC%BC%80%EC%A5%B4%EB%A7%81-setTimeout-%EA%B3%BC-setInterval-y6juukjsey
             */
 
-            let timerId = setTimeout(function tick() {
-                alert('tick');
-                timerId = setTimeout(tick, 2000); // (*)
-            }, 2000);
+            // let timerId = setTimeout(function tick() {
+            //     alert('tick');
+            //     timerId = setTimeout(tick, 2000); // (*)
+            // }, 2000);
             
+            /*
+                RequestAnimationFrame
 
+                javascript에서 애니메이션을 구현하는 방법, new Date()를 사용한 타이머 함수를 만들어 사용
+                이러한 방법은 불필요한 CallStack을 만듬, 화면에 많은 그림을 애니메이션으로 구현해도 실제로는
+                표시가능한 주사율에 영향을 받으므로 높은 부하 발생 가능
 
-            function say() {
-                console.log("Hi");
-                requestAnimationFrame(say);
+                RequestAnimationFrame는 브라우저에게 수행하려는 애니메이션을 알리고 리페인트가 진행되기전 해당 애니메이션을 업데이트하는 함수를 호출
+                CallBack함수를 인자로 받음\
+                콜백의 수는 보통 1초에 60회,  But W3C 권장사항에 따라 그 수가 디스플레이 주사율과 일치
+                성능 향상을 위해 백그라운드나, Hidden에서 실행이 중단
+
+                - 백그라운드 동작 및 비활성화시 중지(성능 최적화)
+                - 최대 1ms(1/1000s)로 제한되며 1초에 60번 동작(권장 - 디스플레이 주사율)
+                - 다수의 애니메이션에도 각각 타이머 값을 생성 및 참조하지 않고 내부의 동일한 타이머 참조
+            */
+            let start = null;
+            let element = document.getElementById('SomeElementYouWantToAnimate');
+            element.style.position = 'absolute';
+            function step(timestamp) {
+                console.log(timestamp); // <--DOMHighResTimeStamp(이 타임스탬프는 밀리초 단위의 십진수지만, 최소 정밀도는 1ms (1000 µs) 입니)
+                if (!start) start = timestamp;
+                let progress = timestamp - start;
+                element.style.left = Math.min(progress / 10, 200) + 'px';
+                if (progress < 2000) {
+                    window.requestAnimationFrame(step);
+                }
             }
 
-            
-
+            window.requestAnimationFrame(step);
         </script>
     </body>
 </html>

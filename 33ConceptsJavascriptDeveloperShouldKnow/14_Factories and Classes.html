@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>  
+    <head>  
+        <body>
+            <script>
+                /*
+                    class 관련된 강의를 좀더 보자
+                    생활코딩 : https://opentutorials.org/course/743
+
+                     자바스크립트 클래스의 내면
+                     https://velog.io/@jakeseo_me/2019-05-03-1005-%EC%9E%91%EC%84%B1%EB%90%A8-evjv7dy8vh
+                     https://medium.com/better-programming/prototypes-in-javascript-5bba2990e04b
+                */
+
+                /*
+                    1.생성자 함수
+                    Javascirpt는 모든것이 함수인 함수형 언어
+                    클래스를 가지기 위해서는 생성자 함수가 사용
+                */
+                function Vehicle(make, model, color, year){
+                    this.make = make;
+                    this.model = model;
+                    this.color = color;
+                    this.year = year; //프로퍼티 추가
+                    this.getName = function(){
+                        return `${this.make} ${this.model}`;
+                    }
+                } // 위 함수는 JavascriptClass의 생성자와 거의 흡사한 기능을 제공
+                  // Vegicle Type의 object를 제공하기 위해 우리는 다음과 같이 코드 작성이 가능
+
+                let car1 = new Vehicle("Toyota", "Corolla", "Black", "2012");
+                let car2 = new Vehicle("Honda", "Civic", "White", "2013");
+
+                console.log(car1);
+                console.log(car2);
+                /*
+                    new Vehicle() 이라는 코드를 작성할 때 javascript 엔진이 실제로 하는 일은 
+                    각 object에 대해 Vehicle 생성자 함수를 복사하는 일.
+                    그리고 모든 Property, method가 Vehicle의 새로운 인스턴스에 복사
+                    문제는 생성자 함수의 멤버 함수가 모든 object에서 반복되는 것을 원하지 않음
+                    또 새로운 프로퍼티나 메소드를 존재하는 생성자 함수에 추가할수 없음
+
+                    year 프로퍼티를 추가하려면 생성자 함수 자체에 추가해야함
+                */
+                
+
+                /*
+                    2.프로토타입
+
+                    자바스크립트에서 새로운 함수가 만들어질때마다, 자바 스크립트 엔진은 기본으로 prototype 프로퍼티를 추가
+                    이것은 프로토타입 오프젝트(prototype object)라고 불림
+                    기본으로 프로토타입 오프젝트는 함수를 다시 가리키는 생성자 프로퍼티와
+                    오브젝트인 또 다른 프로퍼티 __proto__를 가지고 있음
+                    __proto__ 는 'dunder proto'라고 불리며 생성자 함수의 프로퍼티를 가리킴
+                    ('dunder'라는 말은 파이썬에서 왔습니다. 변수 양 끝이 __ 로 묶여 있는 변수를 'dunder' 프로퍼티라고 함)
+
+                    프로토 타입 프로퍼티와 메소드는 모든 생성자 함수 인스턴스 간에 공유가 되지만
+                    생성자 함수의 인스턴스 중 하나에서 어떤 프리미티브 프로퍼티를 변경하였을 때는 해당 인스턴스만 반영
+                */
+                Vehicle.prototype.status = 'good';
+                car2.status = 'bad';
+                console.log(car1.status);
+                console.log(car2.status);
+
+                /*
+                    참조 프로퍼티는 항상 모든 인스턴스 사이에서 공유
+                    배열 타입의 프로퍼티의 경우, 생성된 함수의 인스턴스에 의해 수정되었다고 하여도
+                    모든 인스턴스에 대해 수정
+                */
+
+                Vehicle.prototype.carColor = ["Red", "Green", "Blue"];
+                car1.carColor.push("Black");
+                console.log(car1.carColor);
+                console.log(car2.carColor);
+
+
+                /*
+                    클래스!!!!!!!!!!
+                    자바스크립의 클래스는 프로토타입의 힘을 활용함으로써 새롭게 함수를 작성하는 방법
+                */
+
+                class VehicleClass{
+                    consturctor(make, model, color){
+                        this.make = make;
+                        this.model = model;
+                        this.color = color;
+                    }
+
+                    getNmae(){
+                        return `${this.make} ${this.model}`;
+                    }
+
+                    static getColor(v){
+                        return v.color;
+                    }
+
+                    get model() {
+                        return this._model;
+                    }
+
+                    set model(value){
+                        this._model = value;
+                    }
+                }
+
+                let car3 = new Vehicle("Hyundai", "Avante", "Black", "2020");
+
+                /*
+                    생성자 함수의 코드와 비교하면 매우 비슷
+
+                    클래스의 consturctor를 작동시키기 위해 new 키워드가 필요
+                    
+                    클래스 메서드는 enumerable를 하지 않음
+                    자바스크립에서는 오프젝트의 각 프로퍼티는 enumerable 플래그를 가지고 있음
+                    클래스는 프로토타입에 정의된 모든 메서드들에 대해 플래그를 false로 설정
+                    (이 부분은 잘 모르겠다
+                        역자분이 링크를 걸어주심 : http://zduck.com/2013/non-enumerable-properties-in-javascript/
+                    )
+
+                    constructor를 클래스에 추가하지 않는다면 기본값으로 빈 constructor가 자동으로 추가
+                    constructor() {}
+
+                    클래스 내부의 코드는 항상 strict모드(https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode)
+                    에러를 throwing한다
+
+                    클래스 선언은 hoisted되지 않음 
+
+                    클래스는 오프젝트 리터럴이나 생성자 함수 같은 것을 프로퍼티의 값으로 할당하는 것을 허락하지 않음
+                    함수나 getters/setters 같은 것만 가질수 있음 getters/setters을 통해서만 바꿔라
+                    클래스에서 property:value 할당을 바로 하지 말자
+                */
+
+                /*
+                    클래스 특성
+
+                    1.생성자
+                    클래스 선언에서 생성자는 특별한 함수 생성자는 클래스 자체를 표현하는 함수를 정의
+                    new 키워드를 쓰면 자동 호출
+
+                    생성자는 클래스의 생성자를 확장된 형태로 부르기 위해 super 키워드를 사용할 수 있음
+                    super: https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/super
+
+                     #클래스는 1개의 생성자 함수만 소유 가능
+
+                     2.정적메서드
+                     정적 메서드는 프로토타입 위에 있는 것이 아닌 클래스 자체에 있는 함수
+                     prototype에서 정의된 메서드들은 정적 메서드와 다름
+
+                     정적 메서드들은 static 키워드를 사용
+                     대부분 공용 함수(utility function)을 만들기 위해 사용 
+                     정적 메서드는 클래스의 인스턴스를 생성하지 않고 호출
+                     (위 VehicleClass 참조)
+                */
+                console.log(VehicleClass.getColor(car1));
+
+
+                /*
+                    3.Getters/Setters
+
+                    클래스 또 프로퍼티의 값을 가져오거나/프로퍼티의 값을 설정하기 위해 사용
+                    (위 VehicleClass 참조)
+                    
+                    getters/setters는 클래스 내부 prototype에 정의 되어 있음
+
+                    4.Subclassing
+
+                    Subclassing는 상속을 구현 할 수 있는 방법 extends 키워드를 사용
+                */
+
+                class Car extends VehicleClass{
+                    getName(){
+                         return this.make + " " + this.model +" in child class.";
+                    }
+                }
+                let car = new Car("Honda", "Accord", "Purple", "2021");
+                console.log(car.getName()); 
+
+                //나오지가 않넴?.... 따로 확인 필요
+
+                /*
+                    base클래스의 함수를 불러올 필요가 있음 그럴때 키워드
+                    super 사용
+                */
+
+            </script>
+        </body>
+    </head>
+</html>

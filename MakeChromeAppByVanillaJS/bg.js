@@ -1,12 +1,13 @@
-const body =  document.querySelector("body");
+const body =  document.querySelector(".js-bg");
 
 const IMG_NUMBER = 5;
 
 function paintImage(imgNumber){
-    const image = new Image();
-    image.src =`img/${imgNumber}.jpg`;
-    image.classList.add("bgImage");
-    body.prepend(image);
+    body.style.backgroundImage = `url(img/${imgNumber}.jpg)`;
+    // const image = new Image();
+    // image.src =;
+    // image.classList.add("bgImage");
+    // body.prepend(image);
 }
 
 function genRandom(){

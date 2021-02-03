@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>  
+    <head>
+        <body>
+            <script>
+                /*
+                    https://velog.io/@jakeseo_me/2019-05-07-1605-%EC%9E%91%EC%84%B1%EB%90%A8-qpjvdgllm8
+
+                    This 이해하기
+
+                    함수가 만들어졌을 때, 뒤에서 this라 불리는 키워드가 만들어진다.
+                    this는 함수가 동작하는 곳에 있는 오브젝트와 연결
+
+                    this 키워드의 값은 그 함수 자체와는 상관이 없다.
+                    함수가 어떻게 불려지는지가 this의 값을 결정
+                */
+
+                //기본 this 컨텍스트
+
+                var myFunc = function(){
+                    console.log(this);
+                }
+
+                myFunc();
+                
+                /*
+                    this는 기본값으로 언제나 전역 스코프의 root을 참조하는 window object가 됨
+                    만약 스크립트가 strict mode("use strict") 내에서 작동하고 있다면
+                    this는 undefined 일것
+                */
+
+                //오브젝트 리터럴(object literals)
+               {
+                    var myObject = {
+                        myMethod : function() {
+                            console.log(this);
+                        }
+                    }
+                }
+
+                /*
+                    여기서의 this가 무엇을 가르키는지는 아무도 모른다
+
+                    this 키워드의 값은 언제나 함수 그자체와는 상관이 없다.
+                    함수가 어떻게 호출되는지가 this의 값을 결정
+                */
+               {
+                   var myMethod = function(){
+                       console.log(this);
+                   };
+
+                   var myObject = {
+                       myMethod : myMethod
+                   };
+
+                   myObject.myMethod();
+                   myMethod();
+               }
+               /*
+                    위의 this는 어떻게 호출하느냐에 따라 값이 변한다
+                    myObject.myMethod(); // this === myObject
+                    myObject내의 지역 스코프에서 불림
+                    
+                    myMethod(); // this === window
+                    전역 스코프에서 불림
+
+                    이러한 형식은 묵시적 바인딩(implicit binding)이라 불린다
+               */
+
+                //명시적 바인딩(Explicit binding)               
+                /*
+                    함수에 명시적으로 컨텍스트를 바인딩할 때 그것을 며시적 바인딩이라 한다
+                    이러한 동작은 주로 call() / apply() 메소드에 의해 이뤄짐
+
+                    call : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Function/call
+
+                */
+               {
+                   var myMethod = function(){
+                       console.log(this);
+                   };
+
+                   var myObject = {
+                       myMethod : myMethod
+                   };
+
+                   myObject.myMethod();
+                   
+                   myMethod();
+                   myMethod.call(myObject);  // this === myObject
+                   myMethod.apply(myObject); // this === myObject
+               }
+
+               {
+                   var myMethod = function(){
+                       console.log(this);
+                   }
+
+                   var obj1 = {
+                       a:2,
+                       myMethod:myMethod
+                   };
+
+                   var obj2 = {
+                       a:3,
+                       myMethod:myMethod
+                   };
+
+                   obj1.myMethod(); // 2
+                   obj2.myMethod(); // 3
+
+                   obj1.myMethod.call( obj2 ); // 3
+                   obj2.myMethod.call( obj1 ); // 2
+
+                   //명시적인 바인딩이 묵시적 바인딩보다 우위
+               }
+               
+               //하드 바인딩(Hard binding)
+               /*
+                    하드 바인딩은 bind() (ES5)으로 가능
+                    bind() 메소드는 우리가 지정한 this 컨텍스트를 가진 기존 함수를 불러오기 위해 하드코딩된 새로운 함수를 반환
+               */
+
+               {
+                   var myMethod = function(){
+                       console.log(this);
+                   };
+
+                   var myObject = {
+                       myMethod : myMethod
+                   };
+
+                   myMethod();
+                   myMethod = myMethod.bind(myObject);
+                   myMethod();
+
+                   //하드 바인딩은 명시적 바인딩보다 우위
+               }
+
+               {
+                    var myMethod = function () {
+                         console.log(this);
+                    };
+
+                    var obj1 = {
+                        a: 2
+                    };
+
+                    var obj2 = {
+                        a: 3
+                    };
+                    myMethod = myMethod.bind(obj1); // 2
+                    myMethod.call( obj2 );  // 2
+                    //obj2를 call했지만 obj1를 bind했기때문에 2가 나옴
+               }
+
+               //new 바인딩(new binding)
+               {
+                   function foo(a){
+                       this.a = a;
+                   }
+
+                   var bar = new foo(2);
+                   console.log(bar.a);
+
+                   //new 인스턴스를 참조하는 함수가 호출되었을 때, this가 만들어짐
+                   //위의 경우 this === bar
+               }
+
+               /*
+                    함수가 new와 함께 호출되었을 때는 묵시적, 명시적, 또는 하드 바인딩을 신경쓰지
+                    않는다. 이때는 그냥 새로운 인스터스인 새로운 컨텍스트를 만들어낸다.
+               */
+               {
+                    function foo(something){
+                        this.a = something;
+                    }
+
+                    var obj1 = {};
+
+                    var bar = foo.bind(obj1)
+                    bar(2);
+
+                    var baz = new bar(3);
+                    console.log(obj1.a); //  2
+                    console.log(baz.a);  //  3
+
+                    //bar변수를 obj1로 바인딩 하였고 new 없이도 잘 동작
+                    //var baz = new bar(3); 는 기존의 bar가 아닌 완전이 새로운 컨텍스트를 만듬
+               }
+
+               //API 호출
+               /*
+                    때때로, 우리는 라이브러리나 헬퍼오브젝트를 사용(Ajax, eventHandling 등등)
+                    그리고 전달된 콜백을 호출, 이러한 경우 this의 동작은 주의
+               */
+              {
+                  var myObject = {
+                      myMethod: function() {
+                          helperObject.doSomethingCool('superCool', this.onSomethigCoolDone);
+                      },
+
+                      onSomethigCoolDone: function() {
+                          consoel.log(this);   /// Only god knows what is "this" here
+                      }
+                  }
+              }
+
+              /*
+                this.onSomethingCoolDone을 콜백으로 넘겼기 때문에 스코프가 그메소드를 참조하고 있다고 생각할수도 있따.
+                but 어떤this이지는 아무로 모른다.
+
+                주로 라이브러리들은 우리를 위해 파라미터를 제공, 그 파라미터를 통해 우리가 다시 가져오길 원하는 스코프를 전달할수있음.
+              */
+              
+              {
+                  var myObject = {
+                      myMethod: function() {
+                          helperObject.doSomethingCool('superCool', this.onSomethigCoolDone, this);
+                      },
+
+                      onSomethigCoolDone: function() {
+                          consoel.log(this);    /// Now everybody know that "this" === myObject
+                      }
+                  }
+              }
+
+              {
+                  //원하는 스코프를 바인딩 할 수도있음
+                   var myObject = {
+                        myMethod: function () {
+                            helperObject.doSomethingCool('superCool', this.onSomethingCoolDone.bind(this));
+                        },
+
+                        onSomethingCoolDone: function () {
+                            /// Now everybody know that "this" === myObject
+                        }
+                    };
+
+                    //클로져를 만들고 this를 me에 캐시할 수도 있음
+                    myObject = {
+                        myMethod: function () {
+                            var me = this;
+
+                            helperObject.doSomethingCool('superCool', function () {
+                            /// Only god knows what is "this" here, but we have access to "me"
+                            });
+                        }
+                    };
+
+                    /*
+                        이 방법은 비추, 메모리 누수를 초래할 수 있고, 진짜 스코프를 잊게 만들어 변수에 의존하게 만듬
+                        this의 문제는 EventListener, timeout, forEach와 같은 것들에도 적용
+                    */
+              }
+
+
+
+              //call(), apply(), bind() 이해하기
+              /*
+                함수를 즉시 호출하기 위해서 call/apply 메소드를 사용할수 있음
+                bind는 함수가 나중에 실행됐을 때도 원본 함수를 호출할 때 갖는 올바른 컨텍스트(this) bind된 함수를 반환
+                bind는 특정 이벤트에서 함수가 나중에 호출될 필요가 있을 때 유용
+              */
+
+              //call() 또는 Function.prototype.call()
+              {
+                //Demo with javascript .call()
+
+                var obj = {name:"Niladri"};
+
+                var greeting = function(a,b,c){
+                     return "welcome "+this.name+" to "+a+" "+b+" in "+c;
+                };
+
+                console.log(greeting.call(obj,"Newtown","KOLKATA","WB"));
+                // returns output as welcome Niladri to Newtown KOLKATA in WB
+
+                /*
+                    함수가 호출되는 순간 this 오브젝트 값 === obj 을 셋팅,
+                    this.name === obj.name
+                */
+              }
+
+              //apply() 또는 Functhis.prototype.apply()
+              {
+                //Demo with javascript .apply()
+
+                var obj = {name:"Niladri"};
+
+                var greeting = function(a,b,c){
+                    return "welcome "+this.name+" to "+a+" "+b+" in "+c;
+                };
+
+                // array of arguments to the actual function
+                var args = ["Newtown","KOLKATA","WB"];  
+                console.log("Output using .apply() below ")
+                console.log(greeting.apply(obj,args));
+
+                /* The output will be 
+                Output using .apply() below
+                welcome Niladri to Newtown KOLKATA in WB */
+
+                /*
+                    call() 과 비슷하게 동작 
+                    다른점은 두번째 파라미터에서 실제 함수의 인자값을 배열로 받는다
+                */
+
+              }
+
+              //bind() 또는 Functhis.prototype.bind()
+              {
+                //Use .bind() javascript
+
+                var obj = {name:"Niladri"};
+
+                var greeting = function(a,b,c){
+                    return "welcome "+this.name+" to "+a+" "+b+" in "+c;
+                };
+
+                //creates a bound function that has same body and parameters 
+                var bound = greeting.bind(obj); 
+
+
+                console.dir(bound); ///returns a function
+
+                console.log("Output using .bind() below ");
+
+                console.log(bound("Newtown","KOLKATA","WB")); //call the bound function
+
+                /* the output will be 
+                Output using .bind() below
+                welcome Niladri to Newtown KOLKATA in WB */
+
+                /*
+                    bound함수가 new 연산자를 이용하여 생성되었을때에는 바인드 시킨 this 값dl 무시 
+                    된다는 것을 알아두자
+                */
+              }
+            </script>
+        </body>
+    </head>
+</html>

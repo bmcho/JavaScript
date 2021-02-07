@@ -70,5 +70,4 @@
         const userName = name ?? 'Guest';
         console.log(userName);
     }
-    }
 }
